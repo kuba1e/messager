@@ -10,10 +10,15 @@ export default {
     );
     return data?.data;
   },
-  createMessage: (text: string, dialogID: string) => {
-    return axios.post(`${BASE_URL}${api.getCreateMessageUrl(dialogID)}`, {
-      text,
-    });
+  createMessage: async (text: string, dialogID: string) => {
+    const { data } = await axios.post(
+      `${BASE_URL}${api.getCreateMessageUrl(dialogID)}`,
+      {
+        text,
+      }
+    );
+
+    return data?.data;
   },
   deleteOneMessage: async (id: string) => {
     return await axios.delete(`${BASE_URL}${api.getDeleteMessageUrl(id)}`);

@@ -42,7 +42,7 @@ export const Login = () => {
     const token = localStorage?.getItem("token");
     if (token) {
       userStore.getUser().then((user) => {
-        updateViewState({ user });
+        updateViewState((prevState) => ({ ...prevState, user }));
         navigate(RouteNames.CHATS);
       });
     }
@@ -80,7 +80,7 @@ export const Login = () => {
       phoneNumber
     );
 
-    updateViewState({ user });
+    updateViewState((prevState) => ({ ...prevState, user }));
 
     user ? navigate(RouteNames.CHATS) : alert("This mail is busy");
   };

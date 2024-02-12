@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { AppRouter } from "./components/AppRouter";
-import authStore from "./stores/authStore";
-import socket from "./core/socket";
-import dialogsStore from "./stores/dialogsStore";
+
 import { ViewStateProvider } from "contexts/ViewStateContext";
 
 const AppWraper = styled.div`

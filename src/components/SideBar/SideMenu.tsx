@@ -234,7 +234,10 @@ export const SideMenu: React.FC<SideMenuProps> = ({
             icon={addSvg}
             title="Create chat"
             callback={() => {
-              updateViewState({ showCreateChatModal: true });
+              updateViewState((prevState) => ({
+                ...prevState,
+                showCreateChatModal: true,
+              }));
             }}
           ></SideItem>
           <SideItem icon={friendsImg} title="Find friends">

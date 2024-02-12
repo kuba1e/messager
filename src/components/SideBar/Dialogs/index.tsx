@@ -1,14 +1,9 @@
-import { dialogs } from "../../../utils/api";
 import React from "react";
 import styled from "styled-components";
 import { DialogItem } from "./DialogItem";
 import { User, dialogsItem } from "../../../types";
-import dialgosStore from "../../../stores/dialogsStore";
-import messagesStore from "../../../stores/messagesStore";
-import authStore from "../../../stores/authStore";
-import socket from "../../../core/socket";
+
 import { Loader } from "../../UI/Loader";
-import { Button } from "../../Button";
 
 const DilagosStyles = styled.div`
   overflow-y: auto;

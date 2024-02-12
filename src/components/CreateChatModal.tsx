@@ -49,9 +49,12 @@ export function CreateChatModal() {
       .createDialog(chatTitle, ChatType.PRIVATE, chatParticipants)
       .finally(() => {
         dialogsStore.fetchDialogs().then((dialogs) => {
-          updateViewState({ dialogs });
+          updateViewState((prevState) => ({ ...prevState, dialogs }));
         });
-        updateViewState({ showCreateChatModal: false });
+        updateViewState((prevState) => ({
+          ...prevState,
+          showCreateChatModal: false,
+        }));
       });
   }, [usersToAddToChat, chatTitle]);
 

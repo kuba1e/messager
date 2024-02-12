@@ -142,7 +142,10 @@ export const DialogItem: React.FC<DialogProps> = ({
     e.preventDefault();
     // if (user?.id === authorizedUser?.id) {
     setContextIsOpen(true);
-    updateViewState({ selectedDialogIdToAddUser: dialog.id });
+    updateViewState((prevState) => ({
+      ...prevState,
+      selectedDialogIdToAddUser: dialog.id,
+    }));
     if (messageEl.current) {
       let targetCoords = messageEl.current.getBoundingClientRect();
       let xCoord = e.clientX - targetCoords.left;
@@ -206,7 +209,10 @@ export const DialogItem: React.FC<DialogProps> = ({
         <ContextMenu isOpen={contextIsOpen}>
           <li
             onClick={() => {
-              updateViewState({ showAddUserToChatModal: true });
+              updateViewState((prevState) => ({
+                ...prevState,
+                showAddUserToChatModal: false,
+              }));
               setContextIsOpen(false);
             }}
           >

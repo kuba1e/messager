@@ -6,11 +6,11 @@ import { dialogsItem } from "../../types";
 import dialogsStore from "../../stores/dialogsStore";
 import { SideMenu } from "./SideMenu";
 import authStore from "../../stores/authStore";
-import socket from "../../core/socket";
 import dialgosStore from "../../stores/dialogsStore";
 import playNotice from "../../utils/helpers/playNotice";
 import { ViewStateContext } from "contexts/ViewStateContext";
 import { useNavigate } from "react-router";
+import { socket } from "services/socket";
 
 const SideBarStyles = styled.div`
   background-color: #1c1d2c;
@@ -94,18 +94,27 @@ export const SideBar = () => {
   const [searchValue, setSearchValue] = React.useState("");
   const menuBtn = React.useRef(null);
   React.useEffect(() => {
-    updateViewState({ isDialogsLoading: true });
+    updateViewState((prevState) => ({ ...prevState, isDialogsLoading: true }));
     dialogsStore
       .fetchDialogs()
-      .then((dialogs) => updateViewState({ dialogs }))
+      .then((dialogs) =>
+        updateViewState((prevState) => ({
+          ...prevState,
+          dialogs,
+        }))
+      )
       .finally(() => {
-        updateViewState({ isDialogsLoading: false });
+        updateViewState((prevState) => ({
+          ...prevState,
+          isDialogsLoading: false,
+        }));
       });
   }, []);
 
   const onSelectDialogue = (id: string) => {
-    updateViewState({ selectedDialogId: id });
-    // navigate(`${id}`);
+    updateViewState((prevState) => ({ ...prevState, selectedDialogId: id }));
+
+    socket.emit("DIALOGS:JOIN", id);
   };
 
   return (

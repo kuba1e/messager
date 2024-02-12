@@ -1,8 +1,8 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { createGlobalStyle } from 'styled-components';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { createGlobalStyle } from "styled-components";
+import App from "./App";
+import { BrowserRouter } from "react-router-dom";
 
 const GlobalStyles = createGlobalStyle`
 	*{
@@ -13,14 +13,14 @@ const GlobalStyles = createGlobalStyle`
 	}
 `;
 
-const container = document.getElementById('app');
+const container = document.getElementById("app");
 const root = createRoot(container!);
 
 root.render(
-	<React.StrictMode>
-		<BrowserRouter>
-			<GlobalStyles />
-			<App />
-		</BrowserRouter>
-	</React.StrictMode>,
+  <React.StrictMode>
+    <BrowserRouter>
+      <GlobalStyles />
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
 );

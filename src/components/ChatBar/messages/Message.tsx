@@ -187,8 +187,6 @@ export const Message: React.FC<MessageProps> = ({
   const msgContext = React.useRef<HTMLDivElement | null>(null);
   const msgText = React.useRef<HTMLParagraphElement | null>(null);
 
-  console.log(user);
-
   const [isEditMessage, setEditMessage] = React.useState(false);
   const [textEditableMessage, setTextEditableMessage] = React.useState("");
   const [chatsModalIsOpen, setChatModalIsOpen] = useState(false);
@@ -198,22 +196,6 @@ export const Message: React.FC<MessageProps> = ({
   >([230, 230]);
 
   React.useEffect(() => {
-    // document.body.addEventListener("click", (e: any) => {
-    //   if (!e.path.includes(msgContext.current)) {
-    //     setContextIsOpen(false);
-    //   }
-    // });
-
-    // document.body.addEventListener("click", enableEditMsg);
-
-    // document.body.addEventListener("contextmenu", (e: any) => {
-    //   //TODO: fix multiply contexts in msg
-    //   // if (!e.path.includes(msgContext.current)) {
-    //   // 	setContextIsOpen(false);
-    //   // 	console.log('закрыть');
-    //   // }
-    // });
-
     scrollTo.current && scrollTo.current.scrollIntoView();
 
     return () => {
@@ -255,14 +237,22 @@ export const Message: React.FC<MessageProps> = ({
 
   const deleteMessage = () => {
     setContextIsOpen(false);
-    updateViewState({ isMessagesLoading: true });
+    updateViewState((prevState) => ({ ...prevState, isMessagesLoading: true }));
     messagesApi.deleteOneMessage(message_id).then(() => {
-      updateViewState({ isMessagesLoading: true });
+      updateViewState((prevState) => ({
+        ...prevState,
+        isMessagesLoading: true,
+      }));
       messagesStore
         .fetchMessages(selectedDialogId, pageSize, offset)
-        .then((messages) => updateViewState({ messages }))
+        .then((messages) =>
+          updateViewState((prevState) => ({ ...prevState, messages }))
+        )
         .finally(() => {
-          updateViewState({ isMessagesLoading: false });
+          updateViewState((prevState) => ({
+            ...prevState,
+            isMessagesLoading: true,
+          }));
         });
     });
     setContextIsOpen(false);
@@ -279,12 +269,20 @@ export const Message: React.FC<MessageProps> = ({
         messagesApi
           .updateOneMessage(message_id, textEditableMessage)
           .then(() => {
-            updateViewState({ isMessagesLoading: true });
+            updateViewState((prevState) => ({
+              ...prevState,
+              isMessagesLoading: true,
+            }));
             messagesStore
               .fetchMessages(selectedDialogId, pageSize, offset)
-              .then((messages) => updateViewState({ messages }))
+              .then((messages) =>
+                updateViewState((prevState) => ({ ...prevState, messages }))
+              )
               .finally(() => {
-                updateViewState({ isMessagesLoading: false });
+                updateViewState((prevState) => ({
+                  ...prevState,
+                  isMessagesLoading: false,
+                }));
               });
           });
       }
@@ -407,12 +405,24 @@ export const Message: React.FC<MessageProps> = ({
                   messagesApi
                     .forwardOneMessage(message_id, dialog.id)
                     .then(() => {
-                      updateViewState({ isMessagesLoading: true });
+                      updateViewState((prevState) => ({
+                        ...prevState,
+                        isMessagesLoading: true,
+                      }));
                       messagesStore
                         .fetchMessages(selectedDialogId, pageSize, offset)
-                        .then((messages) => updateViewState({ messages }))
+                        .then((messages) =>
+                          updateViewState((prevState) => ({
+                            ...prevState,
+                            messages,
+                          }))
+                        )
+
                         .finally(() => {
-                          updateViewState({ isMessagesLoading: false });
+                          updateViewState((prevState) => ({
+                            ...prevState,
+                            isMessagesLoading: false,
+                          }));
                           setChatModalIsOpen(false);
                         });
                     });

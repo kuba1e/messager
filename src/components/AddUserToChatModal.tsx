@@ -46,14 +46,16 @@ export function AddUserToChatModal() {
 
   const createChat = useCallback(() => {
     const trimmedEmail = email.trim();
-    console.log(viewState.selectedDialogIdToAddUser);
     dialogsStore
       .addUserToDialogByEmail(viewState.selectedDialogIdToAddUser, trimmedEmail)
       .finally(() => {
         dialogsStore.fetchDialogs().then((dialogs) => {
-          updateViewState({ dialogs });
+          updateViewState((prevState) => ({ ...prevState, dialogs }));
         });
-        updateViewState({ showCreateChatModal: false });
+        updateViewState((prevState) => ({
+          ...prevState,
+          showCreateChatModal: false,
+        }));
       });
 
     // const chatParticipants = usersToAddToChat

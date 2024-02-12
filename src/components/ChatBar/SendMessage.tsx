@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import socket from "../../core/socket";
 import messagesStore from "../../stores/messagesStore";
 import { EmojiPicker } from "../EmojiPicker";
 import TextareaAutosize from "react-textarea-autosize";
 import { CSSTransition } from "react-transition-group";
 import { ViewStateContext } from "contexts/ViewStateContext";
+import { messageItem } from "types";
 
 interface SendMessageProps {}
 
@@ -201,6 +201,7 @@ export const SendMessage: React.FC<SendMessageProps> = () => {
     viewState: { selectedDialogId, pageSize, messages },
     updateViewState,
   } = useContext(ViewStateContext);
+
   const [message, setMessage] = React.useState<string>("");
   const [emojiVisible, setEmojiVisible] = React.useState(false);
   const [selectedFiles, setSelectedFiles] = React.useState<any>([]);
@@ -218,29 +219,29 @@ export const SendMessage: React.FC<SendMessageProps> = () => {
       ) {
         e.preventDefault();
 
-        // const currentPage = messages.length / pageSize;
+        const newMessage = (await messagesStore.sendMessage(
+          selectedDialogId,
+          message
+        )) as unknown as messageItem;
 
-        await messagesStore.sendMessage(selectedDialogId, message);
-        updateViewState({ isMessagesLoading: true });
-        await messagesStore
-          .fetchMessages(selectedDialogId, pageSize, messages.length)
-          .then((messages) => updateViewState({ messages }))
-          .finally(() => {
-            updateViewState({ isMessagesLoading: false });
-          });
+        updateViewState((prevState) => ({
+          ...prevState,
+          messages: [...prevState.messages, newMessage],
+        }));
         setMessage("");
         setEmojiVisible(false);
         return false;
       }
     } else {
-      await messagesStore.sendMessage(selectedDialogId, message);
-      updateViewState({ isMessagesLoading: true });
-      await messagesStore
-        .fetchMessages(selectedDialogId, pageSize, messages.length)
-        .then((messages) => updateViewState({ messages }))
-        .finally(() => {
-          updateViewState({ isMessagesLoading: false });
-        });
+      const newMessage = (await messagesStore.sendMessage(
+        selectedDialogId,
+        message
+      )) as unknown as messageItem;
+      updateViewState((prevState) => ({
+        ...prevState,
+        messages: [...prevState.messages, newMessage],
+      }));
+
       setMessage("");
       setEmojiVisible(false);
       return false;

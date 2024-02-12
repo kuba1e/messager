@@ -1,4 +1,4 @@
-import React, { SetStateAction, useMemo, useState } from "react";
+import React, { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { User, dialogsItem, messageItem } from "types";
 
 type Props = {
@@ -21,7 +21,7 @@ type ViewState = {
 
 export type ViewStateContextValue = {
   viewState: ViewState;
-  updateViewState: (newState: Partial<ViewState>) => void;
+  updateViewState: Dispatch<SetStateAction<ViewState>>;
 };
 
 export const ViewStateContext =
@@ -41,8 +41,7 @@ export const ViewStateProvider = (props: Props) => {
   const contextValue: ViewStateContextValue = useMemo(
     () => ({
       viewState,
-      updateViewState: (newState: Partial<ViewState>) =>
-        setViewState((prev) => ({ ...prev, ...newState })),
+      updateViewState: setViewState,
     }),
     [viewState]
   );
